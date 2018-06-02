@@ -12,7 +12,12 @@ public class QuestionIdle implements Istate{
     }
 
     @Override
-    public void doAction() {
+    public void enter() {
+        studentSystem.setCurrentStateQuestionnaire(this);
+        System.out.println("enter "+ this.toString() + " state");
+    }
 
+    public String toString(){
+        return this.getClass().getSimpleName();
     }
 }

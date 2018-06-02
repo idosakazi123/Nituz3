@@ -12,13 +12,13 @@ public class QuestionAnswer implements Istate {
     }
 
     @Override
-    public void doAction() {
-        java.lang.System.out.println("student is in Question Answer");
-        studentSystem.setState(this);
+    public void enter() {
+        studentSystem.setCurrentStateQuestionnaire(this);
+        System.out.println("enter "+ this.toString() + " state");
     }
 
 
     public String toString(){
-        return "Question Answer";
+        return this.getClass().getSimpleName();
     }
 }
