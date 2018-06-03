@@ -14,11 +14,12 @@ import ATP2017.lab2.Forum.ForumNoActive;
 import ATP2017.lab2.Question.QuestionAnswer;
 import ATP2017.lab2.Question.QuestionIdle;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class StudentSystem implements IstudentSystem {
-
     public int bonus;
     public int week;
     public int article;
@@ -46,8 +47,6 @@ public class StudentSystem implements IstudentSystem {
     Thread ArticleThread;
     Thread forumThread;
     Thread examThread;
-
-
 
     public StudentSystem() {
         bonus = 0;
@@ -85,6 +84,45 @@ public class StudentSystem implements IstudentSystem {
         executor.execute(ArticleThread);
         executor.execute(forumThread);
         executor.execute(examThread);
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+        while(true){
+            try{
+                String command = reader.readLine();
+
+                if(command.startsWith("/exam ")){
+                    int score = Integer.parseInt(command.substring(6));
+                    exam(score);
+                }
+                else if(command.equals("/read")){
+                    read();
+                }
+                else if(command.startsWith("/post ")){
+                    String text = new String(command.substring(6));
+                    post(text);
+                }
+                else if(command.equals("/answer")){
+                    answer();
+                }
+                else if(command.equals("/next_week")){
+                    next_week();
+                }
+                else if(command.startsWith("/status ")){
+                    String text = new String(command.substring(8));
+                    status(text);
+                }
+                else{
+                    throw new Exception("command is not valid, try again");
+                }
+            }
+            catch (Exception e){
+                System.out.println(e.toString());
+            }
+        }
+
+        //reader.close();
+        //executor.shutdown();
     }
 
     public void setCurrentStateQuestionnaire(Istate newState){
@@ -119,10 +157,6 @@ public class StudentSystem implements IstudentSystem {
         return this.currentStateExam;
     }
 
-
-
-
-
     @Override
     public void exam(int score) {
         // exam region
@@ -135,7 +169,6 @@ public class StudentSystem implements IstudentSystem {
                 examExcellence.enter();
             }
         }
-
     }
 
     @Override
@@ -202,6 +235,32 @@ public class StudentSystem implements IstudentSystem {
 
     @Override
     public void status(String text) {
+        StringBuilder sb = new StringBuilder(text);
+        //add Article region status
+        if(currentStateArticle.toString().equals("Diligent")){
+            sb.insert(0,"*");
+            sb.append("*");
+        }
+        else if(currentStateArticle.toString().equals("Researcher")){
+            sb.insert(0,"**");
+            sb.append("**");
+        }
+
+        //add Forum region status
+        if(currentStateForum.toString().equals("ForumActive")){
+            sb.append("(active)");
+        }
+
+        //add Article Exam status
+        if(currentStateExam.toString().equals("ExamPass")){
+            sb.append(":-)");
+        }
+        else if(currentStateExam.toString().equals("ExamExcellence")){
+            sb.insert(0,"^^^");
+            sb.append("^^^");
+        }
+
+        System.out.println(sb.toString());
 
     }
 }
