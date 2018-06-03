@@ -186,7 +186,7 @@ public class StudentSystem implements IstudentSystem {
             diligent.enter();
         }else if(currentStateArticle.toString().equals("Diligent")&& article == 8){
             researcher.enter();
-        }else if(currentStateArticle.toString().equals("Diligent")&& article < 10){
+        }else if((currentStateArticle.toString().equals("Researcher") || currentStateArticle.toString().equals("Diligent"))&& article < 10){
             researcher.enter();
         }
     }
